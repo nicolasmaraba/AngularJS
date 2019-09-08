@@ -1,0 +1,19 @@
+<!--Aplicação 1-->
+<html ng-app="helloWorld">
+<head>
+    <title>Hello Word</title>    
+    <script src="angular.js"></script>
+    <script>
+        angular.module("helloWorld", []);//Cria um módulo em javascript e listado no html. O [] serve para a injeção de novos módulos/dependências
+        //agora devo criar minha controller e minha view 
+        angular.module("helloWorld").controller("helloWorldCtrl", function ($scope){//localiza um módulo. o scope é injetado como dependência e é um componente de comunicação entre minha view e minha controller
+            $scope.message = "Hello World";
+        });//localiza um módulo e cria uma controller
+    </script>
+</head>
+<body>
+    <div ng-controller="helloWorldCtrl"> <!--Esta é a minha View. Minha view é o ng-controller-->
+        {{message}}
+    </div>
+</body>
+</html>
