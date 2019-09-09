@@ -1,0 +1,107 @@
+<!--Aplicação 3-->
+<html ng-app="listaTelefonica">
+<head>
+    <title>Lista Telefonica</title>    
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.min.css">
+    <style>
+        .jumbotron{
+            width: 400px;
+            text-align: center;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .table{
+            margin-top: 20px;
+        }
+        .form-control{
+            margin-bottom: 5px;
+        }
+        .selecionado{
+            background-color: yellow;
+        }
+        .negrito{
+            font-weight: bold;
+        }
+    </style>
+    <script src="lib/angular/angular.js"></script>
+    <script>
+        angular.module("listaTelefonica", []); //quando deixamos [] ele traz todo o conjunto de módulos do angular
+        angular.module("listaTelefonica").controller("listaTelefonicaCtrl", function ($scope) {
+            $scope.app = "Lista Telefonica";
+            $scope.contatos = [
+                {nome: "Pedro", telefone: "99998888", cor: "blue"},
+                {nome: "Ana", telefone: "99998877", cor: "yellow"},
+                {nome: "Maria", telefone: "99998866", cor: "red"}
+            ];
+            $scope.operadoras = [
+                {nome: "Oi", codigo: 14, categoria: "Celular"},
+                {nome: "Vivo", codigo: 15, categoria: "Celular"},
+                {nome: "Tim", codigo: 41, categoria: "Celular"},
+                {nome: "GVT", codigo: 25, categoria: "Fixo"},
+                {nome: "Embratel", codigo: 21, categoria: "Fixo"}
+            ];
+            $scope.adicionarContato = function (contato) {
+                $scope.contatos.push(angular.copy(contato));
+                delete $scope.contato;
+            };
+            //$scope.classe1 = "selecionado";
+            //$scope.classe2 = "negrito";
+            $scope.apagarContatos = function (contatos){
+                /*var contatosSelecionados = contatos.filter(function (contato){
+                    if (contato.selecionado) return contato;
+                });*/
+                //console.log(contatosSelecionados);
+                $scope.contatos = contatos.filter(function (contato){
+                    if (!contato.selecionado) return contato;
+                });
+            }
+            $scope.isContatoSelecionado = function (contatos){
+                return contatos.some(function (contato){//o some é similar ao filter. ele retorna true se contato.selecionado
+                    return contato.selecionado;
+                });
+                console.log(isContatoSelecionado);
+            }
+        });
+    </script>
+</head>
+<body ng-controller="listaTelefonicaCtrl">
+    <div class="jumbotron">
+        <!--<h4 ng-bind="app"></h4>-->
+        <h3>{{app}}</h3>
+        <!--{{contatos}}-->
+        <table ng-show="contatos. length > 0" class="table">
+            <tr>
+                <th></th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>operadora</th>
+            </tr>
+            <!--<tr ng-class="[classe1, classe2]" ng-repeat="contato in contatos">-->
+            <!--<tr ng-class="{selecionado: contato.selecionado, negrito: contato.selecionado}" ng-repeat="contato in contatos">-->
+            <tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos">
+                <td><input type="checkbox" ng-model="contato.selecionado"/></td>
+                <td>{{contato.nome}}</td>
+                <td>{{contato.telefone}}</td>
+                <td>{{contato.operadora.nome}}</td>
+                <td><div style="width: 20px; height: 20px;" ng-style="{'background-color': contato.cor}"></div></td>
+            </tr>
+        </table>
+        <hr/>
+        <!--{{contato}}-->
+        <input class="form-control" type="text" ng-model="contato.nome" placeholder="Nome"/>
+        <input class="form-control" type="text" ng-model="contato.telefone" placeholder="Telefone"/>
+        <!--<select class="form-control" ng-model="contato.operadora" ng-options="operadora.codigo as operadora.nome for operadora in operadoras">-->
+        <!--<select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras">-->
+        <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome for operadora in operadoras">
+            <option value="">Selecione uma operadora</option>
+        </select>
+        <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="!contato.nome || !contato.telefone">Adicionar Contato</button>
+        <!--<button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)" ng-disabled="!isContatoSelecionado(contatos)">Apagar Contatos</button>-->
+        <!--<button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)" ng-show="isContatoSelecionado(contatos)">Apagar Contatos</button>-->
+        <!--<button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)" ng-hide="!isContatoSelecionado(contatos)">Apagar Contatos</button>-->
+        <button class="btn btn-danger btn-block" ng-click="apagarContatos(contatos)" ng-if="isContatoSelecionado(contatos)">Apagar Contatos</button>
+    </div>
+    <div ng-include="'footer.html'"></div> <!--Utilizo o '' para escapar do meu arquivo, porquê senão busca-se do meu $scope-->
+</body>
+</html>
